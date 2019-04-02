@@ -108,10 +108,15 @@ function createVisualization(json) {
 function mouseover(d) {
 
   var percentage = (100 * d.value / totalSize).toPrecision(3);
+  var population = d.value;
+  var populationString = population + " ";
   var percentageString = percentage + "%";
   if (percentage < 0.1) {
     percentageString = "< 0.1%";
   }
+
+  d3.select("#population")
+      .text(populationString);
 
   d3.select("#percentage")
       .text(percentageString);
@@ -120,7 +125,7 @@ function mouseover(d) {
       .style("visibility", "");
 
   var sequenceArray = getAncestors(d);
-  updateBreadcrumbs(sequenceArray, percentageString);
+  updateBreadcrumbs(sequenceArray, percentageString, populationString);
 
   // Fade all the segments.
   d3.selectAll("path")
@@ -187,7 +192,7 @@ function breadcrumbPoints(d, i) {
 }
 
 
-function updateBreadcrumbs(nodeArray, percentageString) {
+function updateBreadcrumbs(nodeArray, percentageString, populationString) {
 
   var g = d3.select("#trail")
       .selectAll("g")
@@ -217,6 +222,7 @@ function updateBreadcrumbs(nodeArray, percentageString) {
       .attr("y", b.h / 2)
       .attr("dy", "0.35em")
       .attr("text-anchor", "middle")
+      .text(populationString)
       .text(percentageString);
 
   d3.select("#trail")
